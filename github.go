@@ -27,8 +27,10 @@ func newAuthenticatedClient(token string, baseApiUrl *string) (*authenticatedGit
 	var err error
 
 	if baseApiUrl != nil {
+		log.Printf("Creating regular github.com client")
 		client = github.NewClient(tc)
 	} else {
+		log.Printf("Creating github enterprise client")
 		client, err = github.NewEnterpriseClient(*baseApiUrl, *baseApiUrl, tc)
 	}
 
