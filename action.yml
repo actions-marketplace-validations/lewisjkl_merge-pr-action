@@ -14,7 +14,6 @@ inputs:
     default: merge
     description: 'the merge method to use. allowed values: "merge", "squash", "rebase"'
   CUSTOM_BASE_API_URL:
-    required: false
     description: A custom base url to use for the github API (for github enterprise)
 runs:
   using: docker
