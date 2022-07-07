@@ -16,15 +16,27 @@ type authenticatedGitHubClient struct {
 	client *github.Client
 }
 
-func newAuthenticatedClient(token string) *authenticatedGitHubClient {
+func newAuthenticatedClient(token string, baseApiUrl *string) (*authenticatedGitHubClient, error) {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 
-	client := github.NewClient(tc)
-	return &authenticatedGitHubClient{ctx, client}
+	var client *github.Client
+	var err error
+
+	if baseApiUrl != nil {
+		client = github.NewClient(tc)
+	} else {
+		client, err = github.NewEnterpriseClient(*baseApiUrl, *baseApiUrl, tc)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+	
+	return &authenticatedGitHubClient{ctx, client}, nil
 }
 
 func (c *authenticatedGitHubClient) refetchPR(pr *github.PullRequest) error {

@@ -16,6 +16,7 @@ const (
 	tokenVariable         = "INPUT_GITHUB_TOKEN"
 	allowedUpdateVariable = "INPUT_ALLOWED_UPDATE"
 	mergeMethodVariable   = "INPUT_MERGE_METHOD"
+	customBaseUrl         = "INPUT_CUSTOM_BASE_API_URL"
 )
 
 var (
@@ -103,7 +104,12 @@ func main() {
 func merge(pr *github.PullRequest) {
 	token := getRequiredEnvVar(tokenVariable)
 	mergeMethod := getRequiredEnvVar(mergeMethodVariable)
-	client := newAuthenticatedClient(token)
+	maybeBaseUrl := os.Getenv(customBaseUrl)
+	client, e := newAuthenticatedClient(token, &maybeBaseUrl)
+
+	if e != nil {
+		log.Fatalf("error creating client: %v", e.Error())
+	}
 
 	if err := client.mergePR(pr, mergeMethod); err != nil {
 		log.Fatalf("error merging PR: %v", err.Error())

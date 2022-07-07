@@ -32,6 +32,9 @@ You can also set this to `any` to merge any PR without attempting to detect the 
 ### `MERGE_METHOD`
 The [merge method](https://docs.github.com/en/github/administering-a-repository/about-merge-methods-on-github) to use: `merge`, `squash` or `rebase`. Defaults to `merge`.
 
+### `CUSTOM_BASE_API_URL`
+A custom base url to use for the github API (for github enterprise).
+
 ### Example usage
 
 ```yaml
