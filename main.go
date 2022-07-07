@@ -105,7 +105,7 @@ func merge(pr *github.PullRequest) {
 	token := getRequiredEnvVar(tokenVariable)
 	mergeMethod := getRequiredEnvVar(mergeMethodVariable)
 	maybeBaseUrl := os.Getenv(customBaseUrl)
-	client, e := newAuthenticatedClient(token, &maybeBaseUrl)
+	client, e := newAuthenticatedClient(token, maybeBaseUrl)
 
 	if e != nil {
 		log.Fatalf("error creating client: %v", e.Error())

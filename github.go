@@ -16,7 +16,7 @@ type authenticatedGitHubClient struct {
 	client *github.Client
 }
 
-func newAuthenticatedClient(token string, baseApiUrl *string) (*authenticatedGitHubClient, error) {
+func newAuthenticatedClient(token string, baseApiUrl string) (*authenticatedGitHubClient, error) {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
@@ -26,12 +26,12 @@ func newAuthenticatedClient(token string, baseApiUrl *string) (*authenticatedGit
 	var client *github.Client
 	var err error
 
-	if baseApiUrl != nil {
+	if baseApiUrl == "" {
 		log.Printf("Creating regular github.com client")
 		client = github.NewClient(tc)
 	} else {
 		log.Printf("Creating github enterprise client")
-		client, err = github.NewEnterpriseClient(*baseApiUrl, *baseApiUrl, tc)
+		client, err = github.NewEnterpriseClient(baseApiUrl, baseApiUrl, tc)
 	}
 
 	if err != nil {
